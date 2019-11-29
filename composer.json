@@ -1,0 +1,21 @@
+{
+    "name": "farawayslv/yii2-gallery",
+    "description": "Image Gallery with custom folder as source",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension","gallery"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "FarawaySlv",
+            "email": "turchik18@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "farawayslv\\gallery\\": ""
+        }
+    }
+}
