@@ -20,7 +20,7 @@ class Gallery extends Widget
     {
         parent::init();
         
-        \farawayslv\gallery\src\GalleryAsset::register($this->view);
+        \farawayslv\gallery\GalleryAsset::register($this->view);
         
         $this->files = $this->parseDir($this->source);
     }
