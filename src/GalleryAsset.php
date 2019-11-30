@@ -4,7 +4,7 @@ namespace farawayslv\gallery;
 
 use yii\web\AssetBundle;
 
-class AppAsset extends AssetBundle
+class GalleryAsset extends AssetBundle
 {
     public $sourcePath = '@vendor/farawayslv/yii2-gallery/assets';
     
