@@ -1,0 +1,40 @@
+.image-gallery {
+  color:#2c2d2e;
+}
+
+.image-gallery p {
+  color:#646668;
+}
+
+.image-gallery h2 {
+  font-weight:bold;
+  margin-bottom:40px;
+  padding-top:40px;
+  color:inherit;
+}
+
+@media (max-width:767px) {
+  .image-gallery h2 {
+    margin-bottom:25px;
+    padding-top:25px;
+    font-size:24px;
+  }
+}
+
+.image-gallery .intro {
+  font-size:16px;
+  max-width:80%;
+  margin:0 auto 20px;
+}
+
+.image-gallery .intro p {
+  margin-bottom:0;
+}
+
+.image-gallery .images {
+  padding-bottom:20px;
+}
+
+.image-gallery .item {
+  padding-bottom:10px;
+}
