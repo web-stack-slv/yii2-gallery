@@ -9,12 +9,42 @@ use yii\widgets\LinkPager;
 use yii\helpers\Html;
 
 class Gallery extends Widget
-{
-    public $title = '';
-    public $description = '';
-    public $source;
+{    
+    // string, optional parameter
+    public $title = ''; 
+
+    // string, optional parameter
+    public $description = ''; 
+
+    // string, optional parameter. Subscribe where we have to get images
+    public $source; 
+
+    /* boolean, optional parameter. 
+    * if  - true, we get images from all child folders, 
+    * else  - only from root folder
+    */
     public $isDeep = true;
+
+    /*
+     * array of string - images url, optional parameter.
+     * we can define images directly, without source folder
+     */
     public $files = [];
+
+    // string, optional parameter
+    public $emptyMessage = 'No available photos ...';
+
+    // integer, optional parameter. Haw many photos we want to display on page
+    public $pageSize;
+
+    // string, optional parameter
+    public $imageClass = 'img-fluid';
+
+    // string, optional parameter
+    public $imageWrapClass = '';
+
+    // integer, optional parameter. Haw many photos we want to display on one row
+    public $inRow;
 
     public function init()
     {
@@ -22,7 +52,25 @@ class Gallery extends Widget
         
         \farawayslv\gallery\GalleryAsset::register($this->view);
         
-        $this->files = $this->parseDir($this->source);
+        if($this->source && $this->source != '') 
+        {
+            $this->files = $this->parseDir($this->source);
+        }
+        
+        if(!is_int($this->pageSize) || $this->pageSize < 1) 
+        {
+            $this->pageSize = 24;
+        }
+
+        if(!$this->inRow || !is_int($this->inRow) || $this->inRow < 1)
+        {
+            $this->inRow = 6;
+        }
+
+        $col = ceil(12 / $this->inRow);
+        
+        $this->imageWrapClass .= ' col-sm-6 col-md-3 col-lg-'.$col;
+
     }
 
     public function run()
@@ -34,7 +82,11 @@ class Gallery extends Widget
     {
         $pageParam = $this->createPageParams();
 
-        $pages = new Pagination(['totalCount' => count($this->files), 'pageSize'=>24, 'pageParam' => $pageParam]);
+        $pages = new Pagination([
+            'totalCount' => count($this->files), 
+            'pageSize'=>$this->pageSize, 
+            'pageParam' => $pageParam
+            ]);
         
         $files = array_slice($this->files, $pages->offset, $pages->limit);
         
@@ -44,23 +96,30 @@ class Gallery extends Widget
             $images[] = Html::tag(
                 'div', 
                 Html::a(
-                    Html::img($file, ['class' => 'img-fluid']), $file, ['data-lightbox' => 'images']
+                    Html::img($file, ['class' => $this->imageClass]), $file, ['data-lightbox' => 'images']
                 ), 
-                    ['class' => 'col-sm-6 col-md-3 col-lg-2 item']
+                    ['class' => $this->imageWrapClass.' item']
                 );
+        }
+
+        if(count($images) == 0) {
+            $images[] = Html::tag('div', 
+                Html::tag('h3', $this->emptyMessage, ['class' => 'message']), 
+                ['class'=>'container d-flex justify-content-center']
+            );
         }
         
        Pjax::begin(['timeout' => 5000, 'enablePushState' => false, 'class' => 'gallery-container']);
 
-       echo Html::tag('div', 
-                Html::tag('div', implode("\n", [
-                    Html::tag('div', implode("\n", [
+       echo Html::tag('div', //image-gallery
+                Html::tag('div', implode("\n", [ // container
+                    Html::tag('div', implode("\n", [ // title and description
                         Html::tag('h2', Html::encode($this->title), ['class' => 'text-center']),
                         Html::tag('p', Html::encode($this->description), ['class' => 'text-center']),
                     ]),
                     ['class' => 'intro']),
-                    Html::tag('div', implode("\n", array_filter($images)), ['class' => 'row images']),
-                    Html::tag('div', 
+                    Html::tag('div', implode("\n", array_filter($images)), ['class' => 'row images']), // images                 
+                    Html::tag('div',  // pagination
                         Html::tag('div', 
                             LinkPager::widget([
                                 'pagination' => $pages
@@ -78,6 +137,10 @@ class Gallery extends Widget
         Pjax::end(); 
     }
 
+    /*
+    * if isDeep = true recursive get all images from source folder
+    */
+    
     private function parseDir($dir, &$results = [])
     {
         $rootPath = Yii::getAlias('@webroot');
@@ -113,6 +176,9 @@ class Gallery extends Widget
         return $results;
     }
 
+    /*
+    * if we have several galleries on one page need to create unique routes for each from folders name
+    */
     private function createPageParams()
     {
         $tmp = mb_strtolower($this->source);

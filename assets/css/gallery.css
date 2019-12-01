@@ -2,7 +2,7 @@
   color:#2c2d2e;
 }
 
-.image-gallery p {
+.image-gallery p, h3 {
   color:#646668;
 }
 
@@ -37,4 +37,8 @@
 
 .image-gallery .item {
   padding-bottom:10px;
+}
+
+.image-gallery .message {
+  font-style: italic;
 }
