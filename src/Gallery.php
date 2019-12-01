@@ -90,6 +90,15 @@ class Gallery extends Widget
             'pageSize'=>$this->pageSize, 
             'pageParam' => $pageParam
             ]);
+
+        $options = [
+            'pagination' => $pages
+        ];
+
+        if(is_array($this->pagerOptions) && count($this->pagerOptions) > 0)
+        {
+            $options['options'] = $this->pagerOptions;
+        }
         
         $files = array_slice($this->files, $pages->offset, $pages->limit);
         
@@ -124,10 +133,7 @@ class Gallery extends Widget
                     Html::tag('div', implode("\n", array_filter($images)), ['class' => 'row images']), // images                 
                     Html::tag('div',  // pagination
                         Html::tag('div', 
-                            LinkPager::widget([
-                                'pagination' => $pages,
-                                'options' => $this->pagerOptions
-                            ]), 
+                            LinkPager::widget($options), 
                             ['class' => 'container d-flex justify-content-center']
                         ),
                         ['class' => 'row']
