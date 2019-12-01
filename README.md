@@ -1,6 +1,7 @@
 Image Gallery
 =============
-Image Gallery with custom folder as source
+Image Gallery with custom folder as source or image urls array.
+Use bootstrap 4, lightbox and jquery.
 
 Installation
 ------------
