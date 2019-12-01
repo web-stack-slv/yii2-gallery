@@ -46,6 +46,9 @@ class Gallery extends Widget
     // integer, optional parameter. Haw many photos we want to display on one row
     public $inRow;
 
+    // array options for LinkPager see Yii2 docs. https://www.yiiframework.com/doc/api/2.0/yii-widgets-linkpager
+    public $pagerOptions = [];
+
     public function init()
     {
         parent::init();
@@ -122,7 +125,8 @@ class Gallery extends Widget
                     Html::tag('div',  // pagination
                         Html::tag('div', 
                             LinkPager::widget([
-                                'pagination' => $pages
+                                'pagination' => $pages,
+                                'options' => $this->pagerOptions
                             ]), 
                             ['class' => 'container d-flex justify-content-center']
                         ),
